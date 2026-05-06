@@ -17,12 +17,14 @@ gh pr create --base main --head feature/ma-tache --title "feat: ..." --body "Res
 
 ## Pour update en local par rapport à main :
 
+```bash
 git fetch origin
 git checkout feature/xxx
 git rebase origin/main
 #### résoudre les conflits si nécessaire, puis :
 git rebase --continue
 git push --force-with-lease
+```
 
 ## Rappels
 
