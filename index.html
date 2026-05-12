@@ -1,42 +1,57 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/style.css" />
-    <!-- Font Awesome Kit -->
-    <script defer src="./js/weatherCard.js"></script>
-    <script defer src="./js/app.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instant Weather</title>
-  </head>
-  <body>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
     <header>
-      <h1>INSTANT WEATHER</h1>
-      <p>Votre météo en un clic</p>
-      <p>Choisissez votre commune et consultez les prévisions du jour</p>
+        <h1>Instant Weather</h1>
     </header>
+
     <main>
-      <section id="cityForm">
-        <form id="cityForm_form" action="dummy">
-          <label for="code-postal">Saisissez un code postal</label>
-          <input
-            type="text"
-            id="code-postal"
-            placeholder="Entrez un code postal..."
-          />
-          <label
-            for="communeSelect"
-            class="sr-only"
-            aria-label="Choix de la commune"
-            >Sélectionnez la commune</label
-          >
-          <select id="communeSelect"></select>
-        </form>
-        <button id="validationButton">Valider</button>
-      </section>
-      <section id="weatherInformation">
-        <!-- Ajouter les informations météo ici -->
-      </section>
+        <section class="form-container">
+            <form id="weather-form">
+                <div class="form-group">
+                    <label for="cp">Code Postal :</label>
+                    <input type="text" id="cp" name="cp" pattern="[0-9]{5}" placeholder="Ex: 35000" required aria-required="true">
+                    <button type="button" id="btn-search-cp">Chercher Commune</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="commune">Commune :</label>
+                    <select id="commune" name="commune" disabled required aria-required="true">
+                        <option value="">Sélectionnez d'abord un code postal</option>
+                    </select>
+                </div>
+
+                <fieldset class="advanced-options">
+                    <legend>Options avancées (V2)</legend>
+                    
+                    <div class="form-group">
+                        <label for="days">Nombre de jours de prévision (1 à 7) :</label>
+                        <input type="number" id="days" name="days" min="1" max="7" value="1">
+                    </div>
+
+                    <p>Informations supplémentaires :</p>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="chk-lat" value="lat"> Latitude</label>
+                        <label><input type="checkbox" id="chk-lon" value="lon"> Longitude</label>
+                        <label><input type="checkbox" id="chk-rain" value="rain"> Cumul de pluie (mm)</label>
+                        <label><input type="checkbox" id="chk-wind" value="wind"> Vent moyen (km/h)</label>
+                        <label><input type="checkbox" id="chk-wind-dir" value="wind_dir"> Direction du vent (°)</label>
+                    </div>
+                </fieldset>
+
+                <button type="submit" id="btn-submit" disabled>Afficher la météo</button>
+            </form>
+        </section>
+
+        <section id="results" class="results-container" aria-live="polite"></section>
     </main>
-  </body>
+
+    <script src="app.js"></script>
+</body>
 </html>
