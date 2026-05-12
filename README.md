@@ -14,6 +14,12 @@ git push -u origin feature/ma-tache
 gh pr create --base main --head feature/ma-tache --title "feat: ..." --body "Resume, test, contexte"
 ```
 
+vérife branche
+
+```bash
+git branch -a
+```
+
 
 ## Pour update en local par rapport à main :
 
