@@ -76,17 +76,20 @@ communeSelect.addEventListener("change", () => {
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const selectedCommune = communeSelect.value;
-  
   const nomCommune = communeSelect.options[communeSelect.selectedIndex].text; 
   
   if (!selectedCommune) return;
+
+  // AJOUT : Récupération de la valeur du bouton radio coché
+  const selectedDays = document.querySelector('input[name="days"]:checked').value;
 
   const optionsMeteo = {
     lat: document.getElementById("chk-lat").checked,
     lon: document.getElementById("chk-lon").checked,
     rain: document.getElementById("chk-rain").checked,
     wind: document.getElementById("chk-wind").checked,
-    windDir: document.getElementById("chk-wind-dir").checked
+    windDir: document.getElementById("chk-wind-dir").checked,
+    days: selectedDays // On peut l'ajouter ici pour l'utiliser plus tard
   };
 
   try {

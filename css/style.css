@@ -108,3 +108,40 @@ button:disabled {
     font-size: 3rem;
     margin-bottom: 1rem;
 }
+
+.days-selector {
+    display: flex;
+    justify-content: space-between;
+    background: #eee;
+    padding: 5px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.days-selector input[type="radio"] {
+    display: none;
+}
+
+.days-selector label {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    cursor: pointer;
+    border-radius: 6px;
+    margin: 0 2px;
+    background: transparent;
+    transition: all 0.2s ease;
+    font-weight: bold;
+}
+
+.days-selector input[type="radio"]:checked + label {
+    background: var(--primary-color);
+    color: white;
+}
+
+@media (max-width: 480px) {
+    .days-selector label {
+        padding: 15px 0;
+        font-size: 1.1rem;
+    }
+}
