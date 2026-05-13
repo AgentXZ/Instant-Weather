@@ -9,7 +9,6 @@ async function fetchCommunesByCodePostal(codePostal) {
     const response = await fetch(`https://geo.api.gouv.fr/communes?codePostal=${codePostal}`);
     const data = await response.json();
     return data;
-    return data;
   } catch (error) {
     console.error("Erreur API communes :", error);
     throw error;
@@ -61,11 +60,13 @@ searchCommuneButton.addEventListener("click", async () => {
   communeSelect.disabled = true;
   submitButton.disabled = true;
 
-  if (!/^\d{5}$/.test(codePostal)) return;
+  if (codePostal.length !== 5) {
+    alert("Saisissez un code postal à 5 chiffres, par ex. 35000.");
+    return;
+  }
+
   const data = await fetchCommunesByCodePostal(codePostal);
   displayCommunes(data);
-
-  alert("Saisissez un code postal à 5 chiffres, par ex. 35000.");
 });
 
 communeSelect.addEventListener("change", () => {
