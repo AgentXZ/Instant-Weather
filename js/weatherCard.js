@@ -17,10 +17,10 @@ function createCard(data) {
   weatherSection.appendChild(weatherPrain);
   weatherSection.appendChild(weatherSunHours);
 
-  const reloadButton = document.createElement("div");
+  const reloadButton = document.createElement("button");
   reloadButton.textContent = "Nouvelle recherche";
   reloadButton.classList.add("reloadButton");
-  document.body.appendChild(reloadButton);
+  weatherSection.appendChild(reloadButton);
   reloadButton.addEventListener("click", function () {
     location.reload();
   });
