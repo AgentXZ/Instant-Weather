@@ -97,3 +97,27 @@ form.addEventListener("submit", async (event) => {
     alert("Impossible de récupérer la météo pour l'instant.");
   }
 });
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const selectedCommune = communeSelect.value;
+  const nomCommune = communeSelect.options[communeSelect.selectedIndex].text; 
+  
+  if (!selectedCommune) return;
+
+  const optionsMeteo = {
+    lat: document.getElementById("chk-lat").checked,
+    lon: document.getElementById("chk-lon").checked,
+    rain: document.getElementById("chk-rain").checked,
+    wind: document.getElementById("chk-wind").checked,
+    windDir: document.getElementById("chk-wind-dir").checked
+  };
+
+  try {
+    const data = await fetchMeteoByCommune(selectedCommune);
+    if (data) createCard(data, nomCommune, optionsMeteo); 
+  } catch (error) {
+    console.error("Erreur lors de la récupération météo :", error);
+    alert("Impossible de récupérer la météo pour l'instant.");
+  }
+});
