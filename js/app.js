@@ -10,7 +10,7 @@ async function fetchCommunesByCodePostal(codePostal) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Erreur API communes :", error);
+    console.error(error);
     throw error;
   }
 }
@@ -44,24 +44,23 @@ function displayCommunes(data) {
 
 async function fetchMeteoByCommune(selectedCommune) {
   try {
-    const url = `https://api.meteo-concept.com/api/forecast/daily/0?token=3c0ab2700bc954b08a86164da919e704558e1e9a5b36c3864c46d9aaef378018&insee=${selectedCommune}`;
+    const url = `https://api.meteo-concept.com/api/forecast/daily?token=3c0ab2700bc954b08a86164da919e704558e1e9a5b36c3864c46d9aaef378018&insee=${selectedCommune}`;
     const response = await fetch(url);
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Erreur API météo :", error);
+    console.error(error);
     return null;
   }
 }
 
 searchCommuneButton.addEventListener("click", async () => {
   const codePostal = codePostalInput.value.trim();
-
   communeSelect.disabled = true;
   submitButton.disabled = true;
 
   if (codePostal.length !== 5) {
-    alert("Saisissez un code postal à 5 chiffres, par ex. 35000.");
+    alert("Saisissez un code postal à 5 chiffres.");
     return;
   }
 
@@ -80,7 +79,6 @@ form.addEventListener("submit", async (event) => {
   
   if (!selectedCommune) return;
 
-  // AJOUT : Récupération de la valeur du bouton radio coché
   const selectedDays = document.querySelector('input[name="days"]:checked').value;
 
   const optionsMeteo = {
@@ -89,14 +87,14 @@ form.addEventListener("submit", async (event) => {
     rain: document.getElementById("chk-rain").checked,
     wind: document.getElementById("chk-wind").checked,
     windDir: document.getElementById("chk-wind-dir").checked,
-    days: selectedDays // On peut l'ajouter ici pour l'utiliser plus tard
+    days: parseInt(selectedDays)
   };
 
   try {
     const data = await fetchMeteoByCommune(selectedCommune);
     if (data) createCard(data, nomCommune, optionsMeteo); 
   } catch (error) {
-    console.error("Erreur lors de la récupération météo :", error);
-    alert("Impossible de récupérer la météo pour l'instant.");
+    console.error(error);
+    alert("Erreur lors de la récupération des données.");
   }
 });

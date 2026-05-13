@@ -1,69 +1,56 @@
-function createCard(data, communeName = "Prévisions Météo", options = {}) {
+function createCard(data, communeName, options = {}) {
   const weatherSection = document.getElementById("results");
   weatherSection.innerHTML = ""; 
-  
-  const f = data && data.forecast ? data.forecast : {};
+
   const city = data && data.city ? data.city : {};
+  const forecastList = data && data.forecast ? data.forecast.slice(0, options.days) : [];
 
-  const card = document.createElement("div");
-  card.classList.add("weather-card"); 
-  
-  card.style.width = "100%";
-  card.style.maxWidth = "450px"; 
-  card.style.padding = "2.5rem"; 
-  card.style.fontSize = "1.1rem"; 
+  const cardsContainer = document.createElement("div");
+  cardsContainer.style.display = "flex";
+  cardsContainer.style.flexWrap = "wrap";
+  cardsContainer.style.justifyContent = "center";
+  cardsContainer.style.gap = "20px";
+  cardsContainer.style.width = "100%";
 
-  const title = document.createElement("h2");
-  title.textContent = communeName;
-  title.style.fontSize = "1.8rem"; 
-  title.style.marginBottom = "1.5rem";
-  card.appendChild(title);
+  forecastList.forEach((f, index) => {
+    const card = document.createElement("div");
+    card.classList.add("weather-card");
+    card.style.flex = "1 1 300px";
+    card.style.maxWidth = "350px";
+    card.style.padding = "1.5rem";
 
-  let contenuHTML = `
-    <p style="margin: 12px 0;"><strong>Temp. minimale :</strong> ${f.tmin ?? "--"}°C</p>
-    <p style="margin: 12px 0;"><strong>Temp. maximale :</strong> ${f.tmax ?? "--"}°C</p>
-    <p style="margin: 12px 0;"><strong>Risque de pluie :</strong> ${f.probarain ?? "--"}%</p>
-    <p style="margin: 12px 0;"><strong>Ensoleillement :</strong> ${displayHours(f.sun_hours)}</p>
-  `;
+    const dateTitle = document.createElement("h3");
+    dateTitle.textContent = index === 0 ? `Aujourd'hui à ${communeName}` : `Jour ${index + 1}`;
+    card.appendChild(dateTitle);
 
-  if (options.lat) {
-    contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Latitude :</strong> ${city.latitude ?? "--"}</p>`;
-  }
-  if (options.lon) {
-    contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Longitude :</strong> ${city.longitude ?? "--"}</p>`;
-  }
-  if (options.rain) {
-    contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Cumul de pluie :</strong> ${f.rr10 ?? "--"} mm</p>`;
-  }
-  if (options.wind) {
-    contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Vent moyen :</strong> ${f.wind10m ?? "--"} km/h</p>`;
-  }
-  if (options.windDir) {
-    contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Direction du vent :</strong> ${f.dirwind10m ?? "--"}°</p>`;
-  }
+    let contenuHTML = `
+      <p><strong>Temp. min :</strong> ${f.tmin ?? "--"}°C</p>
+      <p><strong>Temp. max :</strong> ${f.tmax ?? "--"}°C</p>
+      <p><strong>Pluie :</strong> ${f.probarain ?? "--"}%</p>
+      <p><strong>Soleil :</strong> ${f.sun_hours ?? "--"}h</p>
+    `;
 
-  card.innerHTML += contenuHTML;
-  weatherSection.appendChild(card);
+    if (options.lat) contenuHTML += `<p><strong>Lat :</strong> ${city.latitude ?? "--"}</p>`;
+    if (options.lon) contenuHTML += `<p><strong>Lon :</strong> ${city.longitude ?? "--"}</p>`;
+    if (options.rain) contenuHTML += `<p><strong>Cumul pluie :</strong> ${f.rr10 ?? "--"}mm</p>`;
+    if (options.wind) contenuHTML += `<p><strong>Vent :</strong> ${f.wind10m ?? "--"}km/h</p>`;
+    if (options.windDir) contenuHTML += `<p><strong>Direction :</strong> ${f.dirwind10m ?? "--"}°</p>`;
 
-  const btnContainer = document.createElement("div");
-  btnContainer.style.marginTop = "2rem";
+    card.innerHTML += contenuHTML;
+    cardsContainer.appendChild(card);
+  });
+
+  weatherSection.appendChild(cardsContainer);
 
   const reloadButton = document.createElement("button");
   reloadButton.textContent = "Nouvelle recherche";
-  reloadButton.style.padding = "0.8rem 1.5rem"; 
-  reloadButton.style.fontSize = "1rem";
-  
-  reloadButton.addEventListener("click", function () {
-    location.reload();
-  });
-
-  btnContainer.appendChild(reloadButton);
-  weatherSection.appendChild(btnContainer);
+  reloadButton.style.marginTop = "2rem";
+  reloadButton.addEventListener("click", () => location.reload());
+  weatherSection.appendChild(reloadButton);
 
   const formContainer = document.querySelector(".form-container");
   if (formContainer) formContainer.style.display = "none";
-  
-  weatherSection.style.display = "flex"; 
+  weatherSection.style.display = "flex";
   weatherSection.style.flexDirection = "column";
   weatherSection.style.alignItems = "center";
 }
