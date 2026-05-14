@@ -16,6 +16,8 @@ function createCard(data, communeName = "Prévisions Météo", options = {}) {
   for (let i = 0; i < numDays; i++) {
     const f = forecasts[i] || {};
     
+    const weatherInfo = getWeatherInfo(f.weather);
+    
     const card = document.createElement("div");
     card.classList.add("weather-card"); 
     
@@ -24,6 +26,16 @@ function createCard(data, communeName = "Prévisions Météo", options = {}) {
     card.style.padding = "2.5rem"; 
     card.style.fontSize = "1.1rem"; 
     
+    // Application de l'ambiance (fond + couleur du texte)
+    card.style.background = weatherInfo.bgGradient;
+    card.style.color = weatherInfo.textColor;
+    
+    // Création du wrapper pour le contenu (pour qu'il reste au-dessus des effets)
+    const contentWrapper = document.createElement("div");
+    contentWrapper.classList.add("card-content");
+    contentWrapper.style.position = "relative";
+    contentWrapper.style.zIndex = "1";
+
     const title = document.createElement("h2");
     
     let dateStr = `Jour ${i + 1}`;
@@ -36,7 +48,31 @@ function createCard(data, communeName = "Prévisions Météo", options = {}) {
     title.textContent = `${communeName} - ${dateStr}`;
     title.style.fontSize = "1.5rem"; 
     title.style.marginBottom = "1.5rem";
-    card.appendChild(title);
+    title.style.textAlign = "center";
+    contentWrapper.appendChild(title);
+
+    // Conteneur pour l'icône animée
+    const iconContainer = document.createElement("div");
+    iconContainer.style.display = "flex";
+    iconContainer.style.flexDirection = "column";
+    iconContainer.style.alignItems = "center";
+    iconContainer.style.marginBottom = "1.5rem";
+
+    const iconImg = document.createElement("img");
+    iconImg.src = weatherInfo.iconUrl;
+    iconImg.alt = weatherInfo.conditionText;
+    iconImg.style.width = "100px";
+    iconImg.style.height = "100px";
+
+    const conditionLabel = document.createElement("span");
+    conditionLabel.textContent = weatherInfo.conditionText;
+    conditionLabel.style.fontWeight = "bold";
+    conditionLabel.style.fontSize = "1.2rem";
+    conditionLabel.style.marginTop = "0.5rem";
+
+    iconContainer.appendChild(iconImg);
+    iconContainer.appendChild(conditionLabel);
+    contentWrapper.appendChild(iconContainer);
 
     let contenuHTML = `
       <p style="margin: 12px 0;"><strong>Temp. minimale :</strong> ${f.tmin ?? "--"}°C</p>
@@ -61,7 +97,35 @@ function createCard(data, communeName = "Prévisions Météo", options = {}) {
       contenuHTML += `<p style="margin: 12px 0;"><strong>Direction du vent :</strong> ${f.dirwind10m ?? "--"}°</p>`;
     }
 
-    card.innerHTML += contenuHTML;
+    contentWrapper.innerHTML += contenuHTML;
+    
+    // Ajout des effets météo (pluie/neige)
+    if (weatherInfo.effect) {
+      const effectContainer = document.createElement("div");
+      effectContainer.classList.add("effect-container");
+      
+      const numParticles = 30; // Nombre de gouttes/flocons
+      for (let j = 0; j < numParticles; j++) {
+        const particle = document.createElement("div");
+        particle.classList.add(weatherInfo.effect === "rain" ? "rain-drop" : "snow-flake");
+        
+        // Randomisation de la position et de l'animation
+        particle.style.left = `${Math.random() * 100}%`;
+        
+        if (weatherInfo.effect === "rain") {
+          particle.style.animationDuration = `${Math.random() * 0.5 + 0.5}s`;
+          particle.style.animationDelay = `${Math.random() * 2}s`;
+        } else {
+          particle.style.animationDuration = `${Math.random() * 2 + 2}s`;
+          particle.style.animationDelay = `${Math.random() * 3}s`;
+        }
+
+        effectContainer.appendChild(particle);
+      }
+      card.appendChild(effectContainer);
+    }
+
+    card.appendChild(contentWrapper);
     cardsContainer.appendChild(card);
   }
 
@@ -93,4 +157,56 @@ function createCard(data, communeName = "Prévisions Météo", options = {}) {
 function displayHours(sunHours) {
   if (sunHours == null) return "--";
   return sunHours + (sunHours > 1 ? " heures" : " heure");
+}
+
+function getWeatherInfo(weatherCode) {
+  let icon = "cloudy.svg";
+  let bgGradient = "var(--glass-bg)";
+  let conditionText = "Inconnu";
+  let textColor = "#ffffff";
+  let effect = null;
+
+  if (weatherCode === 0) {
+    icon = "day.svg";
+    bgGradient = "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"; 
+    conditionText = "Ensoleillé";
+  } else if (weatherCode >= 1 && weatherCode <= 2) {
+    icon = "cloudy-day-1.svg";
+    bgGradient = "linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)"; 
+    conditionText = "Peu nuageux";
+  } else if (weatherCode >= 3 && weatherCode <= 5) {
+    icon = "cloudy.svg";
+    bgGradient = "linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%)"; 
+    conditionText = "Nuageux";
+  } else if (weatherCode >= 6 && weatherCode <= 7) {
+    icon = "cloudy.svg";
+    bgGradient = "linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%)"; 
+    conditionText = "Brouillard";
+    textColor = "#1e3c72";
+  } else if ((weatherCode >= 10 && weatherCode <= 16) || (weatherCode >= 40 && weatherCode <= 48)) {
+    icon = "rainy-1.svg";
+    bgGradient = "linear-gradient(135deg, #4b6cb7 0%, #182848 100%)"; 
+    conditionText = "Pluvieux";
+    effect = "rain";
+  } else if ((weatherCode >= 20 && weatherCode <= 22) || (weatherCode >= 60 && weatherCode <= 68)) {
+    icon = "snowy-1.svg";
+    bgGradient = "linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%)"; 
+    conditionText = "Neige";
+    textColor = "#1e3c72";
+    effect = "snow";
+  } else if (weatherCode >= 100 && weatherCode <= 142) {
+    icon = "thunder.svg";
+    bgGradient = "linear-gradient(135deg, #141e30 0%, #243b55 100%)"; 
+    conditionText = "Orage";
+    effect = "rain";
+  }
+
+  // Utilisation de la banque d'icônes animées amCharts
+  return {
+    iconUrl: `https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/${icon}`,
+    bgGradient: bgGradient,
+    conditionText: conditionText,
+    textColor: textColor,
+    effect: effect
+  };
 }
