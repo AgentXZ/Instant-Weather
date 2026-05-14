@@ -3,6 +3,14 @@ const codePostalInput = document.getElementById("cp");
 const communeSelect = document.getElementById("commune");
 const searchCommuneButton = document.getElementById("btn-search-cp"); 
 const submitButton = document.getElementById("btn-submit"); 
+const daysSlider = document.getElementById("days-slider");
+const daysValue = document.getElementById("days-value");
+
+if (daysSlider && daysValue) {
+  daysSlider.addEventListener("input", () => {
+    daysValue.textContent = daysSlider.value;
+  });
+}
 
 async function fetchCommunesByCodePostal(codePostal) {
   try {
@@ -44,7 +52,7 @@ function displayCommunes(data) {
 
 async function fetchMeteoByCommune(selectedCommune) {
   try {
-    const url = `https://api.meteo-concept.com/api/forecast/daily/0?token=3c0ab2700bc954b08a86164da919e704558e1e9a5b36c3864c46d9aaef378018&insee=${selectedCommune}`;
+    const url = `https://api.meteo-concept.com/api/forecast/daily?token=3c0ab2700bc954b08a86164da919e704558e1e9a5b36c3864c46d9aaef378018&insee=${selectedCommune}`;
     const response = await fetch(url);
     const data = await response.json();
     return data;
@@ -80,8 +88,8 @@ form.addEventListener("submit", async (event) => {
   
   if (!selectedCommune) return;
 
-  // AJOUT : Récupération de la valeur du bouton radio coché
-  const selectedDays = document.querySelector('input[name="days"]:checked').value;
+  // AJOUT : Récupération de la valeur du curseur
+  const selectedDays = parseInt(document.getElementById('days-slider').value, 10);
 
   const optionsMeteo = {
     lat: document.getElementById("chk-lat").checked,

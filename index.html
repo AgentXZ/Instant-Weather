@@ -30,28 +30,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Nombre de jours de prévision :</label>
+                    <label for="days-slider">Nombre de jours de prévision : <span id="days-value">1</span></label>
                     <div class="days-selector">
-                        <input type="radio" id="day1" name="days" value="1" checked>
-                        <label for="day1">1</label>
-
-                        <input type="radio" id="day2" name="days" value="2">
-                        <label for="day2">2</label>
-
-                        <input type="radio" id="day3" name="days" value="3">
-                        <label for="day3">3</label>
-
-                        <input type="radio" id="day4" name="days" value="4">
-                        <label for="day4">4</label>
-
-                        <input type="radio" id="day5" name="days" value="5">
-                        <label for="day5">5</label>
-
-                        <input type="radio" id="day6" name="days" value="6">
-                        <label for="day6">6</label>
-
-                        <input type="radio" id="day7" name="days" value="7">
-                        <label for="day7">7</label>
+                        <input type="range" id="days-slider" name="days" min="1" max="7" value="1" step="1" style="width: 100%;">
                     </div>
                 </div>
 
