@@ -46,19 +46,19 @@ function createCard(data, communeName = "Prévisions Météo", options = {}) {
     `;
 
     if (options.lat) {
-      contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Latitude :</strong> ${city.latitude ?? "--"}</p>`;
+      contenuHTML += `<p style="margin: 12px 0;"><strong>Latitude :</strong> ${city.latitude ?? "--"}</p>`;
     }
     if (options.lon) {
-      contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Longitude :</strong> ${city.longitude ?? "--"}</p>`;
+      contenuHTML += `<p style="margin: 12px 0;"><strong>Longitude :</strong> ${city.longitude ?? "--"}</p>`;
     }
     if (options.rain) {
-      contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Cumul de pluie :</strong> ${f.rr10 ?? "--"} mm</p>`;
+      contenuHTML += `<p style="margin: 12px 0;"><strong>Cumul de pluie :</strong> ${f.rr10 ?? "--"} mm</p>`;
     }
     if (options.wind) {
-      contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Vent moyen :</strong> ${f.wind10m ?? "--"} km/h</p>`;
+      contenuHTML += `<p style="margin: 12px 0;"><strong>Vent moyen :</strong> ${f.wind10m ?? "--"} km/h</p>`;
     }
     if (options.windDir) {
-      contenuHTML += `<p style="margin: 12px 0; color: #0056b3;"><strong>Direction du vent :</strong> ${f.dirwind10m ?? "--"}°</p>`;
+      contenuHTML += `<p style="margin: 12px 0;"><strong>Direction du vent :</strong> ${f.dirwind10m ?? "--"}°</p>`;
     }
 
     card.innerHTML += contenuHTML;

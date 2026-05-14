@@ -7,6 +7,10 @@ const daysSlider = document.getElementById("days-slider");
 const daysValue = document.getElementById("days-value");
 
 if (daysSlider && daysValue) {
+  // Force le reset à 1 au chargement pour éviter la persistance du navigateur
+  daysSlider.value = 1;
+  daysValue.textContent = "1";
+
   daysSlider.addEventListener("input", () => {
     daysValue.textContent = daysSlider.value;
   });
