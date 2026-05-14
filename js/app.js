@@ -1,13 +1,12 @@
 const form = document.getElementById("weather-form");
 const codePostalInput = document.getElementById("cp");
 const communeSelect = document.getElementById("commune");
-const searchCommuneButton = document.getElementById("btn-search-cp"); 
-const submitButton = document.getElementById("btn-submit"); 
+const searchCommuneButton = document.getElementById("btn-search-cp");
+const submitButton = document.getElementById("btn-submit");
 const daysSlider = document.getElementById("days-slider");
 const daysValue = document.getElementById("days-value");
 
 if (daysSlider && daysValue) {
-  // Force le reset à 1 au chargement pour éviter la persistance du navigateur
   daysSlider.value = 1;
   daysValue.textContent = "1";
 
@@ -88,11 +87,11 @@ communeSelect.addEventListener("change", () => {
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const selectedCommune = communeSelect.value;
-  const nomCommune = communeSelect.options[communeSelect.selectedIndex].text; 
-  
+  const nomCommune = communeSelect.options[communeSelect.selectedIndex].text;
+
   if (!selectedCommune) return;
 
-  // AJOUT : Récupération de la valeur du curseur
+  // Curseur récup
   const selectedDays = parseInt(document.getElementById('days-slider').value, 10);
 
   const optionsMeteo = {
@@ -106,7 +105,7 @@ form.addEventListener("submit", async (event) => {
 
   try {
     const data = await fetchMeteoByCommune(selectedCommune);
-    if (data) createCard(data, nomCommune, optionsMeteo); 
+    if (data) createCard(data, nomCommune, optionsMeteo);
   } catch (error) {
     console.error("Erreur lors de la récupération météo :", error);
     alert("Impossible de récupérer la météo pour l'instant.");
